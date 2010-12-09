@@ -57,7 +57,7 @@ class PartialHelper extends AppHelper {
             }
         }
 
-        if (Configure::read() > 0) {
+        if (Configure::read('debug') > 0) {
             return "Not Found: " . $path;
         }
     }
