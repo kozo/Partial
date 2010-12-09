@@ -1,6 +1,6 @@
 <?php
 /**
- * PartialHelper 
+ * PartialHelper
  */
 /**
  * PartialHelper  code license:
@@ -11,10 +11,10 @@
  */
 
 class PartialHelper extends AppHelper {
-    
+
     function render($name,  $params = array(), $loadHelpers = false){
         $view =& ClassRegistry::getObject('view');
-        
+
         $file = $plugin = $key = null;
 
         if (isset($params['cache'])) {
@@ -31,26 +31,30 @@ class PartialHelper extends AppHelper {
             if ($expires) {
                 $cacheFile = 'partial_' . $key . '_' . Inflector::slug($name);
                 $cache = cache('views' . DS . $cacheFile, null, $expires);
-                
+
                 if (is_string($cache)) {
                     return $cache;
                 }
             }
         }
-        
+
         $buf = explode(DS, $name);
         $buf[count($buf)-1] = '_' . $buf[count($buf)-1];
         $name = implode(DS, $buf);
-        
+
         $controller = $this->params['controller'];
-        $path = APP . "views" . DS . $controller . DS . $name . $view->ext;
-        if (is_file($path)) {
-            $params = array_merge_recursive($params, $view->loaded);
-            $partial = $view->_render($path, array_merge($view->viewVars, $params), $loadHelpers);
-            if (isset($params['cache']) && isset($cacheFile) && isset($expires)) {
-                cache('views' . DS . $cacheFile, $partial, $expires);
+
+        $paths = $view->_paths($plugin, true);
+        foreach ($paths as $viewPath) {
+            $path = $viewPath . DS . $controller . DS . $name . $view->ext;
+            if (is_file($path)) {
+                $params = array_merge_recursive($params, $view->loaded);
+                $partial = $view->_render($path, array_merge($view->viewVars, $params), $loadHelpers);
+                if (isset($params['cache']) && isset($cacheFile) && isset($expires)) {
+                    cache('views' . DS . $cacheFile, $partial, $expires);
+                }
+                return $partial;
             }
-            return $partial;
         }
 
         if (Configure::read() > 0) {
