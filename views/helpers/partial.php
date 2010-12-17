@@ -1,6 +1,6 @@
 <?php
 /**
- * PartialHelper
+ * PartialHelper 
  */
 /**
  * PartialHelper  code license:
@@ -11,7 +11,8 @@
  */
 
 class PartialHelper extends AppHelper {
-
+    const VERSION = '1.1';
+    
     function render($name,  $params = array(), $loadHelpers = false){
         $view =& ClassRegistry::getObject('view');
 
@@ -31,22 +32,20 @@ class PartialHelper extends AppHelper {
             if ($expires) {
                 $cacheFile = 'partial_' . $key . '_' . Inflector::slug($name);
                 $cache = cache('views' . DS . $cacheFile, null, $expires);
-
+                
                 if (is_string($cache)) {
                     return $cache;
                 }
             }
         }
-
+        
         $buf = explode(DS, $name);
         $buf[count($buf)-1] = '_' . $buf[count($buf)-1];
         $name = implode(DS, $buf);
 
         $controller = $this->params['controller'];
-
-        $paths = $view->_paths($plugin, true);
-        foreach ($paths as $viewPath) {
-            $path = $viewPath . DS . $controller . DS . $name . $view->ext;
+        foreach($view->__paths as $val){
+            $path = $val . $controller . DS . $name . $view->ext;
             if (is_file($path)) {
                 $params = array_merge_recursive($params, $view->loaded);
                 $partial = $view->_render($path, array_merge($view->viewVars, $params), $loadHelpers);
@@ -57,7 +56,7 @@ class PartialHelper extends AppHelper {
             }
         }
 
-        if (Configure::read('debug') > 0) {
+        if (Configure::read() > 0) {
             return "Not Found: " . $path;
         }
     }
