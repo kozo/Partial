@@ -43,9 +43,8 @@ class PartialHelper extends AppHelper {
         $buf[count($buf)-1] = '_' . $buf[count($buf)-1];
         $name = implode(DS, $buf);
 
-        $controller = $this->params['controller'];
         foreach($view->_paths($plugin) as $val){
-            $path = $val . $controller . DS . $name . $view->ext;
+            $path = $val . $view->viewPath . DS . $name . $view->ext;
             if (is_file($path)) {
                 $params = array_merge_recursive($params, $view->loaded);
                 $partial = $view->_render($path, array_merge($view->viewVars, $params), $loadHelpers);
