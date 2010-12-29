@@ -38,26 +38,20 @@ class PartialHelper extends AppHelper {
                 }
             }
         }
-        
+
         $buf = explode(DS, $name);
         $buf[count($buf)-1] = '_' . $buf[count($buf)-1];
         $name = implode(DS, $buf);
 
-        $controller = $this->params['controller'];
-        foreach($view->_paths($plugin) as $val){
-            $path = $val . $controller . DS . $name . $view->ext;
-            if (is_file($path)) {
-                $params = array_merge_recursive($params, $view->loaded);
-                $partial = $view->_render($path, array_merge($view->viewVars, $params), $loadHelpers);
-                if (isset($params['cache']) && isset($cacheFile) && isset($expires)) {
-                    cache('views' . DS . $cacheFile, $partial, $expires);
-                }
-                return $partial;
+        if ($partial = $view->render($name, false)) {
+            if (isset($params['cache']) && isset($cacheFile) && isset($expires)) {
+                cache('views' . DS . $cacheFile, $partial, $expires);
             }
+            return $partial;
         }
 
         if (Configure::read() > 0) {
-            return "Not Found: " . $path;
+            return "Not Found: " . str_replace(DS . DS, DS, $view->viewPath . DS . $name);
         }
     }
 }
