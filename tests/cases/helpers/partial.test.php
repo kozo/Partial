@@ -15,6 +15,16 @@ class PartialHelperMockController extends Controller {
 	var $theme = 'test_theme';
 }
 
+class PartialHelperMockView extends View {
+	var $missingFile;
+	var $missingErrorType;
+
+	function _missingView($file, $error = 'missingView') {
+		$this->missingFile = $file;
+		$this->missingErrorType = $error;
+	}
+}
+
 class PartialHelperTestCase extends CakeTestCase {
 
 	function startCase() {
@@ -26,13 +36,17 @@ class PartialHelperTestCase extends CakeTestCase {
 		$this->Controller->constructClasses();
 		$this->Controller->startupProcess();
 
-		$this->View = new View($this->Controller, false);
+		$this->View = new PartialHelperMockView($this->Controller, false);
 		$this->ThemeView = new ThemeView($this->Controller, false);
 
 		$this->View->helpers[] = $this->ThemeView->helpers[] = 'PartialHelper.Partial';
 
 		$this->_renderAs('test', $this->View);
 		$this->_renderAs('test', $this->ThemeView);
+	}
+
+	function endCase() {
+		ClassRegistry::flush();
 	}
 
 	function _registerView($view = 'View') {
@@ -68,6 +82,15 @@ class PartialHelperTestCase extends CakeTestCase {
 		$this->assertEqual($this->View->render('render', false), 'proper');
 	}
 
+	function testViewPath() {
+		$this->_registerView();
+
+		$backup = $this->View->viewPath;
+		$this->View->viewPath = 'view_path_changed' . DS . 'subdirectory';
+		$this->assertEqual($this->View->render('render', false), 'proper view path');
+		$this->View->viewPath = $backup;
+	}
+
 	function testTheme() {
 		$this->_registerView('ThemeView');
 
@@ -99,5 +122,7 @@ class PartialHelperTestCase extends CakeTestCase {
 		$this->_renderAs('invalid');
 
 		$this->assertPattern('/^Not Found: .+$/', $this->View->render('render', false));
+		$this->assertPattern('/_invalid\.ctp/', $this->View->missingFile);
+		$this->assertEqual($this->View->missingErrorType, 'missingView');
 	}
 }
