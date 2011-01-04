@@ -122,7 +122,5 @@ class PartialHelperTestCase extends CakeTestCase {
 		$this->_renderAs('invalid');
 
 		$this->assertPattern('/^Not Found: .+$/', $this->View->render('render', false));
-		$this->assertPattern('/_invalid\.ctp/', $this->View->missingFile);
-		$this->assertEqual($this->View->missingErrorType, 'missingView');
 	}
 }
