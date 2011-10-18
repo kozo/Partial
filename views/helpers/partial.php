@@ -1,4 +1,6 @@
 <?php
+App::uses('AppHelper', 'View/Helper');
+
 /**
  * PartialHelper 
  */
@@ -11,8 +13,31 @@
  */
 
 class PartialHelper extends AppHelper {
-    const VERSION = '1.1';
+    const VERSION = '2.0';
     
+    function render($name,  $params = array(), $loadHelpers = false){
+
+        // @todo:キャッシュ機構がまるで未実装
+        
+        // @todo:pluginのときは未検証
+//        $paths = App::path('View', $plugin);
+        $paths = App::path('View');
+        $filename = $name;
+        if ( !empty($paths) ) {
+            foreach ($paths as $path) {
+                $filename = $path.$this->_View->viewPath.DS.'_'.$name.$this->_View->ext;
+                if (is_file($filename) ) {
+                    return $this->_View->render($filename);
+                }
+            }
+        } 
+
+        if (Configure::read() > 0) {
+            return "Not Found: " . $filename;
+        }
+    }
+
+/*
     function render($name,  $params = array(), $loadHelpers = false){
         $view =& ClassRegistry::getObject('view');
 
@@ -59,4 +84,5 @@ class PartialHelper extends AppHelper {
             return "Not Found: " . $path;
         }
     }
+*/
 }
