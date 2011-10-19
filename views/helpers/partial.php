@@ -22,11 +22,17 @@ class PartialHelper extends AppHelper {
         if (isset($params['plugin'])) {
             $plugin = Inflector::camelize($params['plugin']);
         }
+        
+        // サブディレクトリに対応
+        $buf = explode(DS, $name);
+        $buf[count($buf)-1] = '_' . $buf[count($buf)-1];
+        $name = implode(DS, $buf);
+        
         $paths = App::path('View', $plugin);
         $filename = $name;
         if ( !empty($paths) ) {
             foreach ($paths as $path) {
-                $filename = $path.$this->_View->viewPath.DS.'_'.$name.$this->_View->ext;
+                $filename = $path . $this->_View->viewPath . DS . $name . $this->_View->ext;
                 if (is_file($filename) ) {
                     return $this->_View->render($filename, false);
                 }
