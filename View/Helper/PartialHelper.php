@@ -1,5 +1,6 @@
 <?php
 App::uses('AppHelper', 'View/Helper');
+App::uses('Folder', 'Utility');
 
 /**
  * PartialHelper 
@@ -15,10 +16,14 @@ App::uses('AppHelper', 'View/Helper');
 class PartialHelper extends AppHelper {
     const VERSION = '2.0';
     
-    public $partialCache = 'default';
+    public $partialCache = 'partial';
     
     function render($name, $data = array(), $options = array(), $loadHelpers = false) {
         $file = $plugin = $key = null;
+        // キャッシュの設定(フォルダがない場合は新規作成)
+        $cachePath = TMP . 'cache' . DS . 'partial' . DS;
+        $obj = new Folder($cachePath, true, 0777);
+        Cache::config($this->partialCache, array('engine'=>'File', 'path' => $cachePath));
 
         $plugin = $this->plugin;
         if (isset($options['plugin'])) {
@@ -65,7 +70,6 @@ class PartialHelper extends AppHelper {
             $partial = $this->_render($fullPath, array_merge($this->_View->viewVars, $data));
             
             if (isset($options['cache'])) {
-                // Todo: 書き込み位置の変更
                 Cache::write($key, $partial, $caching['config']);
             }
             return $partial;
