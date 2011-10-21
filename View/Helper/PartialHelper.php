@@ -15,7 +15,7 @@ App::uses('AppHelper', 'View/Helper');
 class PartialHelper extends AppHelper {
     const VERSION = '2.0';
     
-    public $elementCache = 'default';
+    public $partialCache = 'default';
     
     function render($name, $data = array(), $options = array(), $loadHelpers = false) {
         $file = $plugin = $key = null;
@@ -32,12 +32,12 @@ class PartialHelper extends AppHelper {
             }
             $keys = array_merge(array($underscored, $name), array_keys($options), array_keys($data));
             $caching = array(
-                'config' => $this->elementCache,
+                'config' => $this->partialCache,
                 'key' => implode('_', $keys)
                 );
             if (is_array($options['cache'])) {
                 $defaults = array(
-                    'config' => $this->elementCache,
+                    'config' => $this->partialCache,
                     'key' => $caching['key']
                     );
                 $caching = array_merge($defaults, $options['cache']);
