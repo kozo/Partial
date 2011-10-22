@@ -86,7 +86,7 @@ class PartialHelper extends AppHelper {
             //$partial = $this->_render($fullPath, array_merge($this->_View->viewVars, $data));
             $reflMethod = new ReflectionMethod('View', '_render');
             $reflMethod->setAccessible(true);
-            $partial = $reflMethod->invoke($this->_View, $fullPath, $data);
+            $partial = $reflMethod->invoke($this->_View, $fullPath, array_merge($this->_View->viewVars, $data));
             
             if (isset($options['cache'])) {
                 Cache::write($key, $partial, $caching['config']);
