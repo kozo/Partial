@@ -18,7 +18,21 @@ class PartialHelper extends AppHelper {
     
     public $partialCache = 'partial';
     
-    function render($name, $data = array(), $options = array(), $loadHelpers = false) {
+    public function __get($name) {
+        if(isset($this->_View->{$name})){
+            return $this->_View->{$name};
+        }
+        
+        return parent::__get($name);
+    }
+    
+    public function __call($method, $params) {
+        // Todo : element等Viewのメソッドが動かない
+        // Todo : このやり方まずい気がする・・・
+        call_user_func_array(array($this->_View, $method), $params);
+    }
+    
+    function render($name, $data = array(), $options = array(), $loadHelpers = true) {
         $file = $plugin = $key = null;
         // キャッシュの設定(フォルダがない場合は新規作成)
         $cachePath = TMP . 'cache' . DS . 'partial' . DS;
@@ -61,7 +75,6 @@ class PartialHelper extends AppHelper {
 
         // ファイルパス取得
         $fullPath = $this->_getPartialFileName($name, $plugin);
-
         if ($fullPath !== false) {
             if ($loadHelpers === true) {
                 $this->_View->loadHelpers();
@@ -77,7 +90,7 @@ class PartialHelper extends AppHelper {
         $file = $this->_View->viewPath . DS . $name . ".ctp";
 
         if (Configure::read('debug') > 0) {
-            return "Element Not Found: " . $file;
+            return "Partial Not Found: " . $file;
         }
     }
     
@@ -111,12 +124,10 @@ class PartialHelper extends AppHelper {
      * @author sakuragawa
      */
     private function _getExtensions() {
-        $exts = array($this->ext);
-        $exts = Set::filter($exts);
+        $exts = array($this->_View->ext);
         if(empty($exts)){
             return array('.ctp');
         }
-        $exts = $exts[0];
         
         if(!in_array('.ctp', $exts)) {
             array_push($exts, '.ctp');
