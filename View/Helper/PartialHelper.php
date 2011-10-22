@@ -18,22 +18,23 @@ class PartialHelper extends AppHelper {
     
     public $partialCache = 'partial';
     
-    public function __get($name) {
+    /*public function __get($name) {
         if(isset($this->_View->{$name})){
             return $this->_View->{$name};
         }
         
         return parent::__get($name);
-    }
+    }*/
     
-    public function __call($method, $params) {
+    /*public function __call($method, $params) {
         // Todo : element等Viewのメソッドが動かない
         // Todo : このやり方まずい気がする・・・
         call_user_func_array(array($this->_View, $method), $params);
-    }
+    }*/
     
     function render($name, $data = array(), $options = array(), $loadHelpers = true) {
         $file = $plugin = $key = null;
+        
         // キャッシュの設定(フォルダがない場合は新規作成)
         $cachePath = TMP . 'cache' . DS . 'partial' . DS;
         $obj = new Folder($cachePath, true, 0777);
@@ -80,7 +81,12 @@ class PartialHelper extends AppHelper {
                 $this->_View->loadHelpers();
             }
             
-            $partial = $this->_render($fullPath, array_merge($this->_View->viewVars, $data));
+            // Todo : さすがにこれはまずい...
+            //        暫定対応 PHP 5.3.2以上
+            //$partial = $this->_render($fullPath, array_merge($this->_View->viewVars, $data));
+            $reflMethod = new ReflectionMethod('View', '_render');
+            $reflMethod->setAccessible(true);
+            $partial = $reflMethod->invoke($this->_View, $fullPath, $data);
             
             if (isset($options['cache'])) {
                 Cache::write($key, $partial, $caching['config']);
