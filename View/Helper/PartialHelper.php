@@ -3,13 +3,9 @@ App::uses('AppHelper', 'View/Helper');
 App::uses('Folder', 'Utility');
 
 /**
- * PartialHelper 
- */
-/**
- * PartialHelper  code license:
+ * PartialHelper
  *
  * @copyright Copyright (C) 2010 saku.
- * @since CakePHP(tm) v 1.3
  * @license http://www.opensource.org/licenses/mit-license.php The MIT License
  */
 
@@ -17,20 +13,6 @@ class PartialHelper extends AppHelper {
     const VERSION = '2.0';
     
     public $partialCache = 'partial';
-    
-    /*public function __get($name) {
-        if(isset($this->_View->{$name})){
-            return $this->_View->{$name};
-        }
-        
-        return parent::__get($name);
-    }*/
-    
-    /*public function __call($method, $params) {
-        // Todo : element等Viewのメソッドが動かない
-        // Todo : このやり方まずい気がする・・・
-        call_user_func_array(array($this->_View, $method), $params);
-    }*/
     
     function render($name, $data = array(), $options = array(), $loadHelpers = true) {
         $file = $plugin = $key = null;
@@ -50,7 +32,7 @@ class PartialHelper extends AppHelper {
             if ($plugin) {
                 $underscored = Inflector::underscore($plugin);
             }
-            $keys = array_merge(array($underscored, $name), array_keys($options), array_keys($data));
+            $keys = array_merge(array($this->_View->viewPath, $this->_View->action, $underscored, $name), array_keys($options), array_keys($data));
             $caching = array(
                 'config' => $this->partialCache,
                 'key' => implode('_', $keys)
@@ -81,12 +63,18 @@ class PartialHelper extends AppHelper {
                 $this->_View->loadHelpers();
             }
             
-            // Todo : さすがにこれはまずい...
-            //        暫定対応 PHP 5.3.2以上
             //$partial = $this->_render($fullPath, array_merge($this->_View->viewVars, $data));
+            // Cast版
+            $partialView = $this->cast($this->_View, 'PartialView');
+            $partial = $partialView->custom_render($fullPath, array_merge($this->_View->viewVars, $data));
+            
+            /*
+            // castがだめだったら戻す
+            // 暫定対応 PHP 5.3.2以上
+            // Reflection版
             $reflMethod = new ReflectionMethod('View', '_render');
             $reflMethod->setAccessible(true);
-            $partial = $reflMethod->invoke($this->_View, $fullPath, array_merge($this->_View->viewVars, $data));
+            $partial = $reflMethod->invoke($this->_View, $fullPath, array_merge($this->_View->viewVars, $data));*/
             
             if (isset($options['cache'])) {
                 Cache::write($key, $partial, $caching['config']);
@@ -141,7 +129,34 @@ class PartialHelper extends AppHelper {
         
         return $exts;
     }
+
+    /**
+     * クラスを強制的にキャストする
+     * 
+     * @access private
+     * @author sakuragawa
+     * @url http://php.net/manual/ja/language.types.type-juggling.php
+     */
+    function cast($oldObject, $newClassName) {
+        if(class_exists($newClassName)) {
+            $oldSerializedObject = serialize($oldObject);
+            $oldObjectNameLength = strlen(get_class($oldObject));
+            $subtringOffset = $oldObjectNameLength + strlen($oldObjectNameLength) + 6;
+            $newSerializedObject = 'O:' . strlen($newClassName) . ':"' . $newClassName . '":';
+            $newSerializedObject .= substr($oldSerializedObject, $subtringOffset);
+            return unserialize($newSerializedObject);
+        } else {
+            return false;
+        }
+    }
     
+    // これは動いた
+    /*function cast($obj,$class_type){
+        if(class_exists($class_type,true)){
+                $obj = unserialize(preg_replace("/^O:[0-9]+:\"[^\"]+\":/i", "O:".strlen($class_type).":\"".$class_type."\":", serialize($obj)));
+        }
+        return $obj;
+    }*/    
     
     /**
      * render
@@ -149,7 +164,7 @@ class PartialHelper extends AppHelper {
      * @access private
      * @author sakuragawa
      */
-    private function _render($___viewFn, $___dataForView = array()) {
+    /*private function _render($___viewFn, $___dataForView = array()) {
         if (empty($___dataForView)) {
             $___dataForView = $this->viewVars;
         }
@@ -160,5 +175,18 @@ class PartialHelper extends AppHelper {
         include $___viewFn;
 
         return ob_get_clean();
+    }*/
+}
+
+
+/**
+ * renderするためだけのダミークラス
+ * 
+ * @access public
+ * @author sakuragawa
+ */
+class PartialView extends View{    
+    public function custom_render($___viewFn, $___dataForView = array()) {
+        return $this->_render($___viewFn, $___dataForView);
     }
 }
