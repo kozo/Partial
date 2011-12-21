@@ -1,6 +1,6 @@
 <?php
 /**
- * PartialHelper 
+ * PartialHelper
  */
 /**
  * PartialHelper  code license:
@@ -12,7 +12,7 @@
 
 class PartialHelper extends AppHelper {
     const VERSION = '1.1';
-    
+
     function render($name,  $params = array(), $loadHelpers = false){
         $view =& ClassRegistry::getObject('view');
 
@@ -32,13 +32,13 @@ class PartialHelper extends AppHelper {
             if ($expires) {
                 $cacheFile = 'partial_' . $key . '_' . Inflector::slug($name);
                 $cache = cache('views' . DS . $cacheFile, null, $expires);
-                
+
                 if (is_string($cache)) {
                     return $cache;
                 }
             }
         }
-        
+
         $buf = explode(DS, $name);
         $buf[count($buf)-1] = '_' . $buf[count($buf)-1];
         $name = implode(DS, $buf);
