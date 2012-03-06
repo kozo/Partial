@@ -23,5 +23,4 @@ h2. View
   $data = array('aaa'=>'bbb', 'ccc'=>'ddd');
   $options = array();
   echo $this->partial('test', $data, $options);
-?>
 </pre>
