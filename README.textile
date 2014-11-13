@@ -1,0 +1,26 @@
+h1. PartialView
+
+h2. Controller
+
+<pre>
+<?php
+App::uses('AppController', 'Controller');
+App::uses('PartialView', 'View');
+
+class TestsController extends AppController {
+
+    public $viewClass = 'Partial';
+}
+
+</pre>
+
+h2. View
+
+* /View/Tests/index.ctp
+* /View/Tests/_test.ctp
+<pre>
+<?php 
+  $data = array('aaa'=>'bbb', 'ccc'=>'ddd');
+  $options = array();
+  echo $this->partial('test', $data, $options);
+</pre>

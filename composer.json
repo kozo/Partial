@@ -1,0 +1,19 @@
+{
+    "name": "kozo/partial",
+    "description": "Partial plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "keywords": ["cakephp", "template"],
+    "homepage": "https://github.com/kozo/Partial",
+    "license": "MIT",
+    "authors": [
+        {
+                "name": "saku",
+                "homepage": "https://github.com/kozo",
+                "role": "Author"
+            }
+    ],
+    "require": {
+        "cakephp/cakephp": "3.0.x-dev",
+        "cakephp/plugin-installer": "*"
+    }
+}
