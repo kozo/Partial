@@ -11,9 +11,5 @@
                 "homepage": "https://github.com/kozo",
                 "role": "Author"
             }
-    ],
-    "require": {
-        "cakephp/cakephp": "3.0.*-dev",
-        "cakephp/plugin-installer": "*"
-    }
+    ]
 }
