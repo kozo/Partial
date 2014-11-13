@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Partial;
+namespace Partial\View;
 
 //App::uses('View', 'View');
 //App::uses('Folder', 'Utility');
