@@ -18,5 +18,10 @@
     },
     "extra": {
         "installer-name": "Partial"
+    },
+    "autoload": {
+        "psr-4": {
+            "Partial\\": "src"
+        }
     }
 }
