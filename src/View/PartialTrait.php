@@ -2,10 +2,7 @@
 
 namespace Partial\View;
 
-//App::uses('View', 'View');
-//App::uses('Folder', 'Utility');
-
-class PartialView extends \Cake\View\View {
+trait PartialTrait {
     public $partialCache = 'partial';
 
     public function partial($name, array $data = array(), array $options = array()) {
