@@ -27,5 +27,5 @@ Partial content.
 
 example.ctp
 ```
-<?= $this->Partial('hoge'); ?>
+<?= $this->partial('hoge'); ?>
 ```
