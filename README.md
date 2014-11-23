@@ -1,5 +1,7 @@
 # PartialTrait
 
+Partial Plugin is CakePHP element of small scope.
+
 ## Installation
 
 1. composer.json
