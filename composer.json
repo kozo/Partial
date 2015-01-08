@@ -17,7 +17,7 @@
     },
     "autoload": {
         "files" : [
-            "Plugin/Partial/Lib/Trait/PartialTrait.php"
+            "Lib/Trait/PartialTrait.php"
         ]
     }
 }
