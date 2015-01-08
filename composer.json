@@ -14,5 +14,10 @@
     ],
     "require": {
         "composer/installers": "*"
+    },
+    "autoload": {
+        "files" : [
+            "Plugin/Partial/Lib/Trait/PartialTrait.php"
+        ]
     }
 }
