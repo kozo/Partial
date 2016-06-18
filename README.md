@@ -4,11 +4,9 @@ Partial Plugin is CakePHP element of small scope.
 
 ## Installation
 
-1. composer.json
 ```
-"kozo/partial": "3.0.*@dev"
+composer require kozo/partial:"~3.0"
 ```
-2. Run `composer update`
 
 
 ## Usage
