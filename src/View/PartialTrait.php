@@ -28,7 +28,7 @@ trait PartialTrait {
             list ($plugin, $name) = pluginSplit($name, true);
             $name = str_replace('/', DS, $name);
             $file = $plugin . $this->viewPath . DS . '_' . $name . $this->_ext;
-            throw new \Cake\View\Error\MissingElementException($file);
+            throw new \Cake\View\Exception\MissingElementException($file);
         }
     }
 
