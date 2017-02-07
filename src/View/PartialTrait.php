@@ -2,6 +2,8 @@
 
 namespace Partial\View;
 
+use Cake\View\Exception\MissingElementException;
+
 trait PartialTrait {
     public $partialCache = 'partial';
 
@@ -28,7 +30,7 @@ trait PartialTrait {
             list ($plugin, $name) = pluginSplit($name, true);
             $name = str_replace('/', DS, $name);
             $file = $plugin . $this->viewPath . DS . '_' . $name . $this->_ext;
-            throw new \Cake\View\Error\MissingElementException($file);
+            throw new MissingElementException($file);
         }
     }
 
@@ -42,9 +44,15 @@ trait PartialTrait {
         list($plugin, $name) = $this->pluginSplit($name);
 
         $paths = $this->_paths($plugin);
+
+        // add slash
+        $names = explode(DS, $name);
+        $names[count($names) - 1] = '_' . $names[count($names) - 1];
+        $name = implode(DS, $names);
+
         foreach ($paths as $path) {
-            if (file_exists($path . $this->viewPath . DS . '_' . $name . $this->_ext)) {
-                return $path . $this->viewPath . DS . '_' . $name . $this->_ext;
+            if (file_exists($path . $this->viewPath . DS . $name . $this->_ext)) {
+                return $path . $this->viewPath . DS . $name . $this->_ext;
             }
         }
         return false;
