@@ -13,7 +13,7 @@
             }
     ],
     "require": {
-        "cakephp/cakephp": "~3.0",
+        "cakephp/cakephp": "~3.5",
         "cakephp/plugin-installer": "*"
     },
     "extra": {

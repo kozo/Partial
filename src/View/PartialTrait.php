@@ -51,8 +51,8 @@ trait PartialTrait {
         $name = implode(DS, $names);
 
         foreach ($paths as $path) {
-            if (file_exists($path . $this->viewPath . DS . $name . $this->_ext)) {
-                return $path . $this->viewPath . DS . $name . $this->_ext;
+            if (file_exists($path . $this->getTemplatePath() . DS . $name . $this->_ext)) {
+                return $path . $this->getTemplatePath() . DS . $name . $this->_ext;
             }
         }
         return false;
