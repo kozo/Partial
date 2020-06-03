@@ -5,15 +5,13 @@
     "keywords": ["cakephp", "template"],
     "homepage": "https://github.com/kozo/Partial",
     "license": "MIT",
-    "authors": [
-        {
-                "name": "saku",
-                "homepage": "https://github.com/kozo",
-                "role": "Author"
-            }
-    ],
+    "authors": [{
+        "name": "saku",
+        "homepage": "https://github.com/kozo",
+        "role": "Author"
+    }],
     "require": {
-        "cakephp/cakephp": "~3.5",
+        "cakephp/cakephp": "~3.5|~4.0",
         "cakephp/plugin-installer": "*"
     },
     "extra": {
