@@ -29,7 +29,7 @@ trait PartialTrait {
         if (empty($options['ignoreMissing'])) {
             list ($plugin, $name) = pluginSplit($name, true);
             $name = str_replace('/', DS, $name);
-            $file = $plugin . $this->viewPath . DS . '_' . $name . $this->_ext;
+            $file = $plugin . $this->templatePath . DS . '_' . $name . $this->_ext;
             throw new MissingElementException($file);
         }
     }
