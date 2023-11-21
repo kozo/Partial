@@ -5,7 +5,7 @@ Partial Plugin is CakePHP element of small scope.
 ## Installation
 
 ```
-composer require kozo/partial
+composer require kozo/partial:"~5.0"
 ```
 
 ## Usage
