@@ -5,9 +5,8 @@ Partial Plugin is CakePHP element of small scope.
 ## Installation
 
 ```
-composer require kozo/partial:"~3.0"
+composer require kozo/partial:"~5.0"
 ```
-
 
 ## Usage
 
@@ -15,7 +14,8 @@ AppView.php
 ```
 use Partial\View\PartialTrait;
 
-class AppView extends View {
+class AppView extends View
+{
 	use PartialTrait;
 }
 ```

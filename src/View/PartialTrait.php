@@ -1,13 +1,23 @@
 <?php
+declare(strict_types=1);
 
 namespace Partial\View;
 
 use Cake\View\Exception\MissingElementException;
 
-trait PartialTrait {
-    public $partialCache = 'partial';
+trait PartialTrait
+{
+    public string $partialCache = 'partial';
 
-    public function partial($name, array $data = array(), array $options = array()) {
+    /**
+     * @param string $name
+     * @param array $data
+     * @param array $options
+     * @return array|string
+     * @throws \Cake\View\Exception\MissingElementException
+     */
+    public function partial(string $name, array $data = [], array $options = []): array|string
+    {
         $file = $plugin = null;
 
         if (!isset($options['callbacks'])) {
@@ -27,7 +37,7 @@ trait PartialTrait {
         }
 
         if (empty($options['ignoreMissing'])) {
-            list ($plugin, $name) = pluginSplit($name, true);
+            [$plugin, $name] = $this->pluginSplit($name, true);
             $name = str_replace('/', DS, $name);
             $file = $plugin . $this->templatePath . DS . '_' . $name . $this->_ext;
             throw new MissingElementException($file);
@@ -35,13 +45,12 @@ trait PartialTrait {
     }
 
     /**
-     * ファイル名を取得する
-     *
-     * @access private
-     * @author sakuragawa
+     * @param string $name
+     * @return string|bool
      */
-    protected function _getPartialFileName($name) {
-        list($plugin, $name) = $this->pluginSplit($name);
+    protected function _getPartialFileName(string $name): string|bool
+    {
+        [$plugin, $name] = $this->pluginSplit($name);
 
         $paths = $this->_paths($plugin);
 
@@ -55,6 +64,7 @@ trait PartialTrait {
                 return $path . $this->getTemplatePath() . DS . $name . $this->_ext;
             }
         }
+
         return false;
     }
 }

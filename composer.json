@@ -11,8 +11,11 @@
         "role": "Author"
     }],
     "require": {
-        "cakephp/cakephp": "~3.5|~4.0",
-        "cakephp/plugin-installer": "*"
+        "php": ">=8.1.0",
+        "cakephp/cakephp": "~5.0"
+    },
+    "require-dev": {
+        "cakephp/cakephp-codesniffer": "*"
     },
     "extra": {
         "installer-name": "Partial"
@@ -20,6 +23,15 @@
     "autoload": {
         "psr-4": {
             "Partial\\": "src"
+        }
+    },
+    "scripts": {
+        "phpcs": "phpcs --colors -p -s --standard=CakePHP src/",
+        "phpcbf": "phpcbf --colors --parallel=16 -p src/"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     }
 }
